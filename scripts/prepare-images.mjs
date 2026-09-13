@@ -17,12 +17,22 @@ for (const [file, name] of images) {
     .resize(1536, 1024, { fit: "inside" })
     .webp({ quality: 82 })
     .toFile(`public/images/${name}.webp`);
+  await sharp(`${source}/${file}`)
+    .resize(1536, 1024, { fit: "inside" })
+    .avif({ quality: 55, effort: 6 })
+    .toFile(`public/images/${name}.avif`);
 }
 await sharp(`${source}/${images[0][0]}`)
   .resize(768)
   .webp({ quality: 80 })
   .toFile("public/images/driveon-car-small.webp");
 await sharp(`${source}/${images[0][0]}`)
-  .resize(1200, 630, { fit: "cover" })
-  .jpeg({ quality: 84 })
-  .toFile("public/images/social.jpg");
+  .resize(768)
+  .avif({ quality: 55, effort: 6 })
+  .toFile("public/images/driveon-car-small.avif");
+// Optional separately designed social card; do not overwrite it with a plain crop.
+if (process.argv[3])
+  await sharp(process.argv[3])
+    .resize(1200, 630, { fit: "cover" })
+    .jpeg({ quality: 84 })
+    .toFile("public/images/social.jpg");

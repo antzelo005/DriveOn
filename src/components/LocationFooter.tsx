@@ -1,3 +1,5 @@
+import { ContactActionLink } from "../components/ContactActions";
+import { useState } from "react";
 import {
   ArrowUpRight,
   GraduationCap,
@@ -8,29 +10,35 @@ import {
   Phone,
   TrainFront,
 } from "lucide-react";
-import { business, contactLinks } from "../data/business";
+import { business } from "../data/business";
 import { Logo, SectionHeading } from "./Shared";
 
 export function Location() {
+  const [showMap, setShowMap] = useState(false);
   return (
     <section className="location-section section" id="topothesia">
       <div className="container location-layout">
         <div>
           <SectionHeading
             label="ΣΤΗ ΓΕΙΤΟΝΙΑ ΣΟΥ"
-            title="Τα λέμε στο Περιστέρι."
+            title={
+              business.demo
+                ? "Μια διαδρομή στη Δυτική Αθήνα."
+                : `Τα λέμε στο ${business.city}.`
+            }
           >
-            Πέρασε να γνωριστούμε από κοντά. Με εύκολη πρόσβαση από το Μετρό
-            Περιστέρι και τις γύρω γειτονιές.
+            {business.demo
+              ? "Το concept τοποθετείται στο Περιστέρι και τις γύρω γειτονιές. Δεν αντιστοιχεί σε πραγματικό κατάστημα."
+              : `Πέρασε να γνωριστούμε από κοντά. ${business.location.nearestTransport ? `Πρόσβαση από ${business.location.nearestTransport}.` : ""}`}
           </SectionHeading>
           <div className="address-line">
             <MapPin size={21} />
             <div>
               <strong>{business.name}</strong>
               <p>
-                {business.address}
+                {business.demo ? business.location.areaLabel : business.address}
                 <br />
-                {business.city} {business.postalCode}, Αθήνα
+                {!business.demo && `${business.city} ${business.postalCode}`}
               </p>
             </div>
           </div>
@@ -43,58 +51,90 @@ export function Location() {
             ))}
           </dl>
           <div className="location-buttons">
-            <a
+            <ContactActionLink
               className="button button-dark"
-              href={contactLinks.maps}
+              action="maps"
               target="_blank"
               rel="noreferrer"
             >
               Οδηγίες μέσω Google Maps
               <ArrowUpRight size={17} />
-            </a>
-            <a
+            </ContactActionLink>
+            <ContactActionLink
               className="icon-button"
-              href={contactLinks.phone}
+              action="phone"
               aria-label="Κάλεσέ μας"
             >
               <Phone size={20} />
-            </a>
+            </ContactActionLink>
           </div>
-          <p className="location-demo">
-            Ενδεικτική διεύθυνση demo. Οι οδηγίες οδηγούν στο κέντρο
-            Περιστερίου.
-          </p>
+          {business.demo && (
+            <p className="location-demo">
+              Ενδεικτική περιοχή και ωράριο · Δεν υπάρχει φυσική σχολή.
+            </p>
+          )}
+          {!business.demo && business.location.embedUrl && (
+            <div className="map-embed-option">
+              <p>
+                Ο διαδραστικός χάρτης φορτώνει από την Google μόνο αν το
+                επιλέξεις, με τη δική της πολιτική απορρήτου.
+              </p>
+              <button
+                type="button"
+                className="text-link"
+                onClick={() => setShowMap(!showMap)}
+                aria-expanded={showMap}
+              >
+                {showMap ? "Κλείσιμο χάρτη" : "Φόρτωση Google Maps"}
+              </button>
+            </div>
+          )}
         </div>
-        <div
-          className="map-panel"
-          role="img"
-          aria-label="Σχηματική απεικόνιση περιοχής Περιστερίου, όχι χάρτης πλοήγησης"
-        >
-          <div className="map-block block-one" />
-          <div className="map-block block-two" />
-          <div className="map-block block-three" />
-          <div className="map-park" />
-          <div className="map-road road-one" />
-          <div className="map-road road-two" />
-          <div className="map-road road-three" />
-          <span className="map-street">ΠΑΝΑΓΗ ΤΣΑΛΔΑΡΗ</span>
-          <span className="map-area">ΠΕΡΙΣΤΕΡΙ</span>
-          <span className="map-metro">
-            <TrainFront size={17} /> Μετρό Περιστέρι
-          </span>
-          <div className="map-marker">
-            <Navigation size={25} />
-            <strong>{business.shortName}</strong>
-            <span>Το επόμενο βήμα σου, εδώ.</span>
+        {showMap && !business.demo ? (
+          <iframe
+            className="map-panel map-embed"
+            title={`Χάρτης — ${business.name}`}
+            src={business.location.embedUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div
+            className="map-panel"
+            role="img"
+            aria-label={`Σχηματική απεικόνιση περιοχής ${business.city}, όχι χάρτης πλοήγησης`}
+          >
+            <div className="map-block block-one" />
+            <div className="map-block block-two" />
+            <div className="map-block block-three" />
+            <div className="map-park" />
+            <div className="map-road road-one" />
+            <div className="map-road road-two" />
+            <div className="map-road road-three" />
+            <span className="map-street">{business.region.toUpperCase()}</span>
+            <span className="map-area">{business.city.toUpperCase()}</span>
+            <span className="map-metro">
+              <TrainFront size={17} /> {business.location.nearestTransport}
+            </span>
+            <div className="map-marker">
+              <Navigation size={25} />
+              <strong>
+                {business.demo ? business.city : business.shortName}
+              </strong>
+              <span>
+                {business.demo ? "Περιοχή του concept" : "Η γειτονιά μας"}
+              </span>
+            </div>
+            <div className="map-caption">
+              <MapPin size={15} />
+              {business.location.areaLabel}
+              <span>Σχηματικός χάρτης</span>
+            </div>
           </div>
-          <div className="map-caption">
-            <MapPin size={15} />
-            Περιστέρι, Δυτική Αθήνα<span>Σχηματικός χάρτης</span>
-          </div>
-        </div>
+        )}
       </div>
       <div className="container areas">
-        <span>ΚΟΝΤΑ ΣΟΥ, ΣΤΗ ΔΥΤΙΚΗ ΑΘΗΝΑ</span>
+        <span>ΚΟΝΤΑ ΣΟΥ · {business.location.areaLabel.toUpperCase()}</span>
         <div>
           {business.areasServed.map((area) => (
             <span key={area}>{area}</span>
@@ -122,7 +162,7 @@ export function Footer({
               <br />
               Κάνε το δικό σου μαζί μας.
             </p>
-            <span className="footer-tagline">YOUR NEXT CHAPTER. IN DRIVE.</span>
+            <span className="footer-tagline">{business.brand.tagline}</span>
           </div>
           <div>
             <h3>Η διαδρομή σου</h3>
@@ -134,20 +174,22 @@ export function Footer({
           </div>
           <div>
             <h3>Μιλάμε;</h3>
-            <a href={contactLinks.phone}>
+            <ContactActionLink action="phone">
               <Phone size={15} />
               {business.phone}
-            </a>
-            <a href={contactLinks.mobile}>{business.mobile}</a>
-            <a href={contactLinks.email}>
+            </ContactActionLink>
+            <ContactActionLink action="mobile">
+              {business.mobile}
+            </ContactActionLink>
+            <ContactActionLink action="email">
               <Mail size={15} />
               {business.email}
-            </a>
-            <a href={contactLinks.maps} target="_blank" rel="noreferrer">
-              {business.address}
+            </ContactActionLink>
+            <ContactActionLink action="maps" target="_blank" rel="noreferrer">
+              {business.demo ? business.location.areaLabel : business.address}
               <br />
-              {business.city}, {business.postalCode}
-            </a>
+              {!business.demo && `${business.city}, ${business.postalCode}`}
+            </ContactActionLink>
           </div>
           <div>
             <h3>Ώρες λειτουργίας</h3>
@@ -158,7 +200,7 @@ export function Footer({
                 <strong>{item.hours}</strong>
               </p>
             ))}
-            {business.socialLinks.length > 0 && (
+            {!business.demo && business.socialLinks.length > 0 && (
               <div className="social-links">
                 {(business.socialLinks as { label: string; url: string }[]).map(
                   (social) => (
@@ -216,14 +258,14 @@ export function Footer({
         )}
       </footer>
       <nav className="mobile-action-bar" aria-label="Γρήγορη επικοινωνία">
-        <a href={contactLinks.phone}>
+        <ContactActionLink action="phone">
           <Phone size={19} />
           <span>Κλήση</span>
-        </a>
-        <a href={contactLinks.whatsapp} target="_blank" rel="noreferrer">
+        </ContactActionLink>
+        <ContactActionLink action="whatsapp" target="_blank" rel="noreferrer">
           <MessageCircle size={20} />
           <span>WhatsApp</span>
-        </a>
+        </ContactActionLink>
         <a href="#epikoinonia">
           <ArrowUpRight size={20} />
           <span>Ξεκίνα τώρα</span>

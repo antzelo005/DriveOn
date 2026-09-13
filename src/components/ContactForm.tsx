@@ -1,3 +1,6 @@
+import { business } from "../data/business";
+import { useContactCategory } from "../lib/contact-context";
+import { track } from "../lib/analytics";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
@@ -21,9 +24,13 @@ export function ContactForm({
   selection,
   onPrivacy,
 }: {
-  selection: { id: LicenceId | ""; key: number };
+  selection: { id: LicenceId | ""; key: number; message?: string };
   onPrivacy: () => void;
 }) {
+  const { setCategory } = useContactCategory();
+  const submitting = useRef(false);
+  const started = useRef(false);
+  const honeypot = useRef<HTMLInputElement>(null);
   const [lead, setLead] = useState<Lead>(initialLead);
   const [errors, setErrors] = useState<LeadErrors>({});
   const [status, setStatus] = useState<
@@ -35,7 +42,11 @@ export function ContactForm({
   const [selectionKey, setSelectionKey] = useState(selection.key);
   if (selection.key !== selectionKey) {
     setSelectionKey(selection.key);
-    setLead((current) => ({ ...current, licence: selection.id }));
+    setLead((current) => ({
+      ...current,
+      licence: selection.id,
+      message: selection.message || current.message,
+    }));
     setStatus("idle");
     setErrors((current) => ({ ...current, licence: undefined }));
   }
@@ -44,11 +55,16 @@ export function ContactForm({
   }, [status]);
   function update<K extends keyof Lead>(key: K, value: Lead[K]) {
     setLead((current) => ({ ...current, [key]: value }));
+    if (key === "licence") setCategory(value as LicenceId | "");
+    if (!started.current) {
+      started.current = true;
+      track("form_start", { source: "form" });
+    }
     if (errors[key]) setErrors((current) => ({ ...current, [key]: undefined }));
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "loading") return;
+    if (submitting.current) return;
     const nextErrors = validateLead(lead);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) {
@@ -57,14 +73,20 @@ export function ContactForm({
         ?.focus();
       return;
     }
+    submitting.current = true;
     setStatus("loading");
     try {
-      const response = await submitLead(lead);
+      const response = await submitLead(lead, honeypot.current?.value);
+      track("form_success", { category: lead.licence, source: "form" });
       setDemo(response.demo);
       setStatus("success");
       setLead(initialLead);
+      setCategory("");
     } catch {
+      track("form_error", { category: lead.licence, source: "form" });
       setStatus("error");
+    } finally {
+      submitting.current = false;
     }
   }
   const error = (key: keyof Lead) =>
@@ -97,7 +119,7 @@ export function ContactForm({
           onClick={() => {
             setStatus("idle");
             requestAnimationFrame(() =>
-              form.current?.querySelector("input")?.focus(),
+              form.current?.querySelector<HTMLInputElement>("#name")?.focus(),
             );
           }}
         >
@@ -117,6 +139,29 @@ export function ContactForm({
       <div className="form-heading">
         <h3>Ας κάνουμε την αρχή.</h3>
         <p>Λίγα στοιχεία. Ένα βήμα πιο κοντά στο δίπλωμά σου.</p>
+      </div>
+      {lead.licence && (
+        <p className="selection-note">
+          Σε ενδιαφέρει:{" "}
+          <strong>
+            {lead.licence === "other"
+              ? "Επιπλέον υπηρεσία / καθοδήγηση"
+              : `Κατηγορία ${lead.licence}`}
+          </strong>
+          . Μπορείς να αλλάξεις την επιλογή σου.
+        </p>
+      )}
+      <div className="honeypot" aria-hidden="true">
+        <label htmlFor="company">
+          Company
+          <input
+            ref={honeypot}
+            id="company"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </label>
       </div>
       <fieldset disabled={status === "loading"} className="form-fields">
         <div className="form-grid">
@@ -205,22 +250,24 @@ export function ContactForm({
                 ["viber", "Viber"],
                 ["email", "Email"],
               ] as const
-            ).map(([value, label]) => (
-              <label
-                key={value}
-                className={lead.method === value ? "selected" : ""}
-              >
-                <input
-                  type="radio"
-                  name="method"
-                  value={value}
-                  checked={lead.method === value}
-                  onChange={() => update("method", value)}
-                />
-                {label}
-                {lead.method === value && <Check size={13} />}
-              </label>
-            ))}
+            )
+              .filter(([value]) => business.form.methods.includes(value))
+              .map(([value, label]) => (
+                <label
+                  key={value}
+                  className={lead.method === value ? "selected" : ""}
+                >
+                  <input
+                    type="radio"
+                    name="method"
+                    value={value}
+                    checked={lead.method === value}
+                    onChange={() => update("method", value)}
+                  />
+                  {label}
+                  {lead.method === value && <Check size={13} />}
+                </label>
+              ))}
           </div>
         </fieldset>
         <label htmlFor="message">
@@ -231,7 +278,7 @@ export function ContactForm({
             name="message"
             rows={3}
             maxLength={2000}
-            placeholder="Π.χ. με βολεύουν απογευματινά μαθήματα…"
+            placeholder="Π.χ. έχω ήδη δίπλωμα και θέλω εξάσκηση…"
             value={lead.message}
             onChange={(e) => update("message", e.target.value)}
           />

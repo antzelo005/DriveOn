@@ -4,14 +4,20 @@ import {
   Bike,
   CarFront,
   Check,
-  FileCheck2,
   Route,
 } from "lucide-react";
-import { licences, process } from "../data/content";
+import { business } from "../data/business";
+import { LicenceFinder } from "./LicenceFinder";
+import { OptionalServices } from "./OptionalServices";
+import { licences, process, reviews } from "../data/content";
 import type { LicenceId } from "../data/content";
 import { SectionHeading } from "./Shared";
 
-export function Services({ select }: { select: (id: LicenceId) => void }) {
+export function Services({
+  select,
+}: {
+  select: (id: LicenceId, message?: string) => void;
+}) {
   return (
     <>
       <section id="diplomata" className="section licences-section">
@@ -31,6 +37,7 @@ export function Services({ select }: { select: (id: LicenceId) => void }) {
             {licences.map((licence) => (
               <article
                 key={licence.id}
+                id={`licence-${licence.id}`}
                 className={`licence-card ${licence.featured ? "featured" : ""}`}
               >
                 <div className="licence-card-top">
@@ -78,18 +85,45 @@ export function Services({ select }: { select: (id: LicenceId) => void }) {
               Επίσημη ενημέρωση <ArrowUpRight size={13} />
             </a>
           </div>
-          <div className="extra-services">
-            <div>
-              <FileCheck2 size={24} />
-              <p>
-                <strong>Έχεις ήδη δίπλωμα;</strong> Επεκτάσεις, ανανεώσεις,
-                επανεκπαίδευση ή ενημέρωση για επαγγελματικές κατηγορίες.
-              </p>
-            </div>
-            <a href="#epikoinonia" onClick={() => select("other")}>
-              Ας το συζητήσουμε <ArrowRight size={17} />
-            </a>
+          <div className="secondary-services" aria-label="Επιπλέον υπηρεσίες">
+            <span>Έχεις ήδη δίπλωμα;</span>
+            {business.services
+              .filter((service) => service.enabled)
+              .map((service) => (
+                <a
+                  href="#epikoinonia"
+                  key={service.label}
+                  onClick={() =>
+                    select("other", `Με ενδιαφέρει: ${service.label}.`)
+                  }
+                >
+                  {service.label}
+                  <ArrowUpRight size={14} />
+                </a>
+              ))}
           </div>
+          <OptionalServices select={select} />
+          <LicenceFinder select={select} />
+          {reviews[0] && (
+            <figure className="early-proof">
+              <span className="stars" aria-hidden="true">
+                ★★★★★
+              </span>
+              <div>
+                <blockquote>«{reviews[0].text}»</blockquote>
+                <figcaption>
+                  {reviews[0].name} ·{" "}
+                  {business.demo
+                    ? "Φανταστική αξιολόγηση demo"
+                    : reviews[0].category}
+                </figcaption>
+              </div>
+              <a href="#axiologiseis">
+                Δες τις ιστορίες
+                <ArrowUpRight size={16} />
+              </a>
+            </figure>
+          )}
         </div>
       </section>
       <section className="process-section section" id="diadikasia">

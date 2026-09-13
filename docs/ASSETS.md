@@ -1,6 +1,12 @@
 # Original demo photography
 
-Generated with the built-in image generation tool. Final assets are copied into this project and compressed to WebP; the hero has a 768px responsive variant and a 1200×630 JPEG social crop. No external stock-photo service is used. All scenes and people are fictional.
+Generated with the built-in image generation tool. Final assets are local AVIF with WebP fallbacks; the hero has a 768px responsive variant and a separately designed 1200×630 JPEG social card. No external stock-photo service is used. All scenes and people are fictional.
+
+## Final refinement
+
+AVIF quality 55, generated from the original PNGs, reduces the car from 241,756 to 120,726 bytes (50%), small car from 79,562 to 43,623 (45%), team from 106,424 to 65,423 (39%), motorcycle from 206,186 to 115,383 (44%). Existing WebP files remain as fallbacks. The `Photo` component uses native picture/source selection; no image library was added.
+
+Social card source: built-in generated image `exec-b331051b-ab99-4f1f-9bf5-55332a353a17.png`, using the original car photo as a reference. Final `public/images/social.jpg`: 1200×630, 145,884 bytes. Prompt: preserve the recognizable white car and Athens setting; create a premium dark petrol navy / warm yellow sharing layout, DRIVEON arrow wordmark, exact Greek headlines “Το δίπλωμά σου.” and “Η ελευθερία σου.”, and “ΣΧΟΛΗ ΟΔΗΓΩΝ · CONCEPT DEMO”. No phone/address/review claims. Typography and crop were visually reviewed. This card also requires replacement for client mode because its demo label is part of the pixels.
 
 ## Hero and car
 

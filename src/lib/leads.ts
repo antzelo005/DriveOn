@@ -1,9 +1,10 @@
+import { createLeadTransport } from "./lead-transport";
 import type { LicenceId } from "../data/content";
 import { business } from "../data/business";
 
 export const leadEndpoint = business.demo
   ? undefined
-  : import.meta.env.VITE_LEAD_ENDPOINT;
+  : import.meta.env.VITE_LEAD_ENDPOINT || business.form.endpoint;
 
 export type ContactMethod = "phone" | "whatsapp" | "viber" | "email";
 export interface Lead {
@@ -43,32 +44,18 @@ export function validateLead(lead: Lead): LeadErrors {
   return errors;
 }
 
-/** The only delivery boundary. The demo never stores or transmits personal data. */
-export async function submitLead(lead: Lead): Promise<{ demo: boolean }> {
-  const endpoint = leadEndpoint;
-  if (!endpoint) {
-    await new Promise((resolve) => setTimeout(resolve, 850));
-    return { demo: true };
-  }
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12000);
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        ...lead,
-        name: lead.name.trim(),
-        email: lead.email.trim(),
-      }),
-      signal: controller.signal,
-    });
-    if (!response.ok) throw new Error("Lead delivery failed");
-    return { demo: false };
-  } finally {
-    clearTimeout(timeout);
-  }
+/** The only delivery boundary. Endpoint must validate, rate-limit and reject spam server-side. */
+const transport = createLeadTransport({
+  demo: business.demo,
+  endpoint: leadEndpoint,
+  timeoutMs: business.form.timeoutMs,
+});
+export async function submitLead(
+  lead: Lead,
+  honeypot = "",
+): Promise<{ demo: boolean }> {
+  return transport(
+    { ...lead, name: lead.name.trim(), email: lead.email.trim() },
+    honeypot,
+  );
 }

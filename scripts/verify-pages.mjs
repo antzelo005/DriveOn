@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 import assert from "node:assert/strict";
 import { chromium, expect } from "@playwright/test";
+import business from "../src/data/business.json" with { type: "json" };
 import { pagesConfig } from "./pages-config.ts";
 
 const pages = pagesConfig();
@@ -17,6 +18,7 @@ const mime = {
   ".json": "application/json",
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
+  ".avif": "image/avif",
   ".jpg": "image/jpeg",
   ".woff2": "font/woff2",
   ".xml": "application/xml",
@@ -77,11 +79,17 @@ try {
     html.includes(`href="${pages.siteUrl}"`),
     "Canonical must include the repository name.",
   );
-  assert.ok(
-    (await (await fetch(new URL("sitemap.xml", url))).text()).includes(
-      `<loc>${pages.siteUrl}</loc>`,
-    ),
-  );
+  const sitemap = await fetch(new URL("sitemap.xml", url));
+  if (business.mode === "demo") {
+    assert.equal(sitemap.status, 404, "No sitemap for the non-indexable demo");
+    assert.ok(!html.includes("LocalBusiness"), "No fictional business schema");
+    assert.ok(!html.includes(business.address), "No fictional street address");
+    assert.ok(
+      !/href="(?:tel:|mailto:|viber:|https:\/\/wa.me)/.test(html),
+      "No actionable contact destinations",
+    );
+  } else
+    assert.ok((await sitemap.text()).includes(`<loc>${pages.siteUrl}</loc>`));
   if (!liveUrl && pages.base !== "/") {
     assert.equal(
       (await fetch(new URL("/images/driveon-car.webp", site))).status,

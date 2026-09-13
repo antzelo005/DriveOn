@@ -1,8 +1,21 @@
+import { business } from "./business";
 export const assets = {
-  hero: `${import.meta.env.BASE_URL}images/driveon-car.webp`,
-  heroSmall: `${import.meta.env.BASE_URL}images/driveon-car-small.webp`,
-  team: `${import.meta.env.BASE_URL}images/driveon-team.webp`,
-  motorcycle: `${import.meta.env.BASE_URL}images/driveon-motorcycle.webp`,
+  heroAvif: business.media.heroAvif
+    ? `${import.meta.env.BASE_URL}${business.media.heroAvif}`
+    : undefined,
+  heroSmallAvif: business.media.heroSmallAvif
+    ? `${import.meta.env.BASE_URL}${business.media.heroSmallAvif}`
+    : undefined,
+  teamAvif: business.media.teamAvif
+    ? `${import.meta.env.BASE_URL}${business.media.teamAvif}`
+    : undefined,
+  motorcycleAvif: business.media.motorcycleAvif
+    ? `${import.meta.env.BASE_URL}${business.media.motorcycleAvif}`
+    : undefined,
+  hero: `${import.meta.env.BASE_URL}${business.media.hero}`,
+  heroSmall: `${import.meta.env.BASE_URL}${business.media.heroSmall}`,
+  team: `${import.meta.env.BASE_URL}${business.media.team}`,
+  motorcycle: `${import.meta.env.BASE_URL}${business.media.motorcycle}`,
 };
 
 export const navigation = [
@@ -13,7 +26,7 @@ export const navigation = [
 ] as const;
 
 export type LicenceId = "B" | "A1" | "A2" | "A" | "other";
-export const licences: {
+const allLicences: {
   id: LicenceId;
   title: string;
   eyebrow: string;
@@ -29,7 +42,12 @@ export const licences: {
     age: "Από 17 ετών*",
     description:
       "Για τις καθημερινές σου διαδρομές και για εκείνες που ακόμη ονειρεύεσαι.",
-    facts: ["Χειροκίνητο ή αυτόματο", "Θεωρία & πρακτική, βήμα βήμα"],
+    facts: [
+      business.features.automaticCar
+        ? "Χειροκίνητο ή αυτόματο"
+        : "Χειροκίνητο αυτοκίνητο",
+      "Θεωρία & πρακτική, βήμα βήμα",
+    ],
     featured: true,
   },
   {
@@ -60,6 +78,10 @@ export const licences: {
     facts: ["Χωρίς περιορισμό ισχύος", "Δυνατότητα επέκτασης από Α2"],
   },
 ];
+
+export const licences = allLicences.filter((l) =>
+  business.enabledLicences.includes(l.id),
+);
 
 export const process = [
   {
@@ -109,7 +131,7 @@ export const team = [
   },
 ];
 
-export const vehicles = [
+const allVehicles = [
   {
     name: "Peugeot 208",
     category: "B",
@@ -152,46 +174,62 @@ export const vehicles = [
   },
 ];
 
-export const reviews = [
+export const vehicles = allVehicles.filter(
+  (v) =>
+    business.enabledLicences.includes(v.category) &&
+    (business.features.automaticCar || v.type !== "Αυτόματο"),
+);
+
+const allReviews = [
   {
     name: "Ελένη Κ.",
+    verified: false,
     initials: "ΕΚ",
     category: "Δίπλωμα αυτοκινήτου",
     text: "Ξεκίνησα χωρίς καμία εμπειρία και από το πρώτο μάθημα ένιωσα άνετα. Ο Γιώργος ήταν υπομονετικός και μου εξηγούσε τα πάντα χωρίς άγχος.",
   },
   {
     name: "Μάριος Π.",
+    verified: false,
     initials: "ΜΠ",
     category: "Δίπλωμα Α2",
     text: "Πήγα για Α2 και έμαθα πράγματα που θα μου μείνουν σε κάθε διαδρομή. Σωστή προετοιμασία και πραγματικό ενδιαφέρον από τον Νίκο.",
   },
   {
     name: "Άννα Μ.",
+    verified: false,
     initials: "ΑΜ",
     category: "Δίπλωμα αυτοκινήτου",
     text: "Το ανέβαλλα χρόνια γιατί φοβόμουν. Η Μαρία με βοήθησε να το πάρω απόφαση και να νιώσω σιγουριά. Μακάρι να είχα ξεκινήσει νωρίτερα!",
   },
   {
     name: "Κώστας Δ.",
+    verified: false,
     initials: "ΚΔ",
     category: "Δίπλωμα αυτοκινήτου",
     text: "Δουλεύω σε βάρδιες και καταφέραμε να βρούμε πρόγραμμα που με βόλευε. Ήξερα από την αρχή τι περιλαμβάνεται και τι χρειάζεται.",
   },
   {
     name: "Σοφία Τ.",
+    verified: false,
     initials: "ΣΤ",
     category: "Μαθήματα επανεκπαίδευσης",
     text: "Είχα δίπλωμα αλλά δεν οδηγούσα. Κάναμε μαζί τις διαδρομές που χρειαζόμουν και πλέον πηγαίνω στη δουλειά με το αυτοκίνητό μου.",
   },
   {
     name: "Πέτρος Α.",
+    verified: false,
     initials: "ΠΑ",
     category: "Δίπλωμα Α1",
     text: "Μου έλυσαν όλες τις απορίες με τα χαρτιά και τα μαθήματα. Η εκπαίδευση στη μηχανή ήταν οργανωμένη, με έμφαση στην ασφάλεια.",
   },
 ];
 
-export const faq = [
+export const reviews = allReviews.filter(
+  (review) => business.demo || review.verified,
+);
+
+const allFaq = [
   [
     "Από ποια ηλικία μπορώ να ξεκινήσω για αυτοκίνητο;",
     "Για την κατηγορία Β προβλέπεται διαδικασία από τα 17, με ειδικούς όρους συνοδευόμενης οδήγησης μέχρι τα 18. Θα σε καθοδηγήσουμε για τη συναίνεση κηδεμόνα και τις προϋποθέσεις που ισχύουν στη δική σου περίπτωση.",
@@ -233,3 +271,21 @@ export const faq = [
     "Η βάση μας είναι το Περιστέρι και δεχόμαστε μαθητές από Ίλιον, Αιγάλεω, Πετρούπολη, Χαϊδάρι και Αγίους Αναργύρους. Το σημείο συνάντησης για το μάθημα συμφωνείται με τον εκπαιδευτή.",
   ],
 ];
+
+export const faq = allFaq
+  .filter(
+    ([question]) =>
+      (business.features.automaticCar || !question.includes("αυτόματο")) &&
+      (business.features.eveningLessons ||
+        !question.includes("απογευματινά")) &&
+      (business.enabledLicences.some((id) => id !== "B") ||
+        !question.includes("μηχανή")),
+  )
+  .map(([question, answer]) => [
+    question,
+    question.includes("απογευματινά")
+      ? `Οργανώνουμε μαθήματα κατόπιν συνεννόησης και διαθεσιμότητας.${business.features.eveningLessons ? " Υπάρχουν και απογευματινές ώρες." : ""}${business.features.saturdayLessons ? " Συζητάμε και μαθήματα το Σάββατο." : ""}`
+      : question.includes("περιοχές")
+        ? `Η βάση μας είναι το ${business.city}. Εξυπηρετούμε τις περιοχές ${business.areasServed.join(", ")}. Το σημείο συνάντησης συμφωνείται με τον εκπαιδευτή.`
+        : answer,
+  ]);

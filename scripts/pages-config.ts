@@ -1,4 +1,5 @@
 import defaults from "../config/github-pages.json" with { type: "json" };
+import business from "../src/data/business.json" with { type: "json" };
 
 /** GitHub Actions supplies the actual owner/repository, preserving path casing. */
 export function pagesConfig(repository = process.env.GITHUB_REPOSITORY) {
@@ -12,10 +13,21 @@ export function pagesConfig(repository = process.env.GITHUB_REPOSITORY) {
     name.toLowerCase() === `${owner.toLowerCase()}.github.io`
       ? "/"
       : `/${name}/`;
+  const custom = business.seo.siteUrl ? new URL(business.seo.siteUrl) : null;
+  if (
+    custom &&
+    (custom.protocol !== "https:" ||
+      custom.search ||
+      custom.hash ||
+      !custom.pathname.endsWith("/"))
+  )
+    throw new Error(
+      "seo.siteUrl must be an HTTPS URL with a trailing slash, no query or fragment.",
+    );
   return {
     owner,
     repository: name,
-    base,
-    siteUrl: `https://${owner.toLowerCase()}.github.io${base}`,
+    base: custom?.pathname || base,
+    siteUrl: custom?.href || `https://${owner.toLowerCase()}.github.io${base}`,
   };
 }

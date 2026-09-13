@@ -1,6 +1,7 @@
+import { ContactActionLink } from "../components/ContactActions";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Menu, Phone, X } from "lucide-react";
-import { business, contactLinks } from "../data/business";
+import { business } from "../data/business";
 import { navigation } from "../data/content";
 import { Logo } from "./Shared";
 
@@ -19,12 +20,14 @@ export function Header() {
       { rootMargin: "-20% 0px -55% 0px" },
     );
     document
-      .querySelectorAll("main section[id]")
+      .querySelectorAll("#diplomata, #sxoli, #oximata, #faq")
       .forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
   useEffect(() => {
     if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     nav.current?.querySelector("a")?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -32,7 +35,7 @@ export function Header() {
         toggle.current?.focus();
       }
       if (e.key === "Tab") {
-        const links = nav.current?.querySelectorAll<HTMLAnchorElement>("a");
+        const links = nav.current?.querySelectorAll<HTMLElement>("a, button");
         if (!links?.length) return;
         if (e.shiftKey && document.activeElement === links[0]) {
           e.preventDefault();
@@ -55,6 +58,7 @@ export function Header() {
     document.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);
     return () => {
+      document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
     };
@@ -66,7 +70,8 @@ export function Header() {
       </a>
       {business.demo && (
         <div className="demo-strip">
-          DEMO WEBSITE <span>Μια νέα διαδρομή για τη δική σου σχολή.</span>
+          CONCEPT DEMO{" "}
+          <span>Φανταστική σχολή · Πραγματικές δυνατότητες σχεδιασμού.</span>
           <a href="#demo-info">
             Σχετικά με το demo <ArrowUpRight size={12} />
           </a>
@@ -88,10 +93,10 @@ export function Header() {
             ))}
           </nav>
           <div className="header-actions">
-            <a className="header-phone" href={contactLinks.phone}>
+            <ContactActionLink className="header-phone" action="phone">
               <Phone size={16} />
               {business.phone}
-            </a>
+            </ContactActionLink>
             <a className="button button-yellow header-cta" href="#epikoinonia">
               Ξεκίνα τώρα <ArrowUpRight size={17} />
             </a>
@@ -124,10 +129,10 @@ export function Header() {
             Επικοινωνία
             <ArrowUpRight size={18} />
           </a>
-          <a href={contactLinks.phone} onClick={() => setOpen(false)}>
+          <ContactActionLink action="phone" onClick={() => setOpen(false)}>
             <Phone size={18} />
             {business.phone}
-          </a>
+          </ContactActionLink>
         </nav>
       </header>
       {open && (

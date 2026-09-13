@@ -1,3 +1,4 @@
+import { business } from "../data/business";
 import { useState } from "react";
 import {
   ArrowUpRight,
@@ -13,7 +14,9 @@ import type { LicenceId } from "../data/content";
 import { Photo, SectionHeading, TextLink } from "./Shared";
 
 export function School({ select }: { select: (id: LicenceId) => void }) {
-  const [filter, setFilter] = useState<"car" | "moto">("car");
+  const [filter, setFilter] = useState<"car" | "moto">(
+    business.enabledLicences.includes("B") ? "car" : "moto",
+  );
   const filteredVehicles = vehicles.filter((v) =>
     filter === "car" ? v.category === "B" : v.category !== "B",
   );
@@ -58,7 +61,7 @@ export function School({ select }: { select: (id: LicenceId) => void }) {
               {
                 icon: Clock3,
                 title: "Χρόνος που σου ταιριάζει.",
-                text: "Πρωί, απόγευμα ή Σάββατο. Βρίσκουμε μαζί το πρόγραμμά σου.",
+                text: `Βρίσκουμε μαζί το πρόγραμμά σου.${business.features.eveningLessons ? " Και απογευματινές ώρες." : ""}${business.features.saturdayLessons ? " Και το Σάββατο." : ""}`,
               },
               {
                 icon: ShieldCheck,
@@ -95,18 +98,22 @@ export function School({ select }: { select: (id: LicenceId) => void }) {
               role="group"
               aria-label="Τύπος οχήματος"
             >
-              <button
-                aria-pressed={filter === "car"}
-                onClick={() => setFilter("car")}
-              >
-                <CarFront size={17} /> Αυτοκίνητα
-              </button>
-              <button
-                aria-pressed={filter === "moto"}
-                onClick={() => setFilter("moto")}
-              >
-                <Bike size={17} /> Μηχανές
-              </button>
+              {business.enabledLicences.includes("B") && (
+                <button
+                  aria-pressed={filter === "car"}
+                  onClick={() => setFilter("car")}
+                >
+                  <CarFront size={17} /> Αυτοκίνητα
+                </button>
+              )}
+              {business.enabledLicences.some((id) => id !== "B") && (
+                <button
+                  aria-pressed={filter === "moto"}
+                  onClick={() => setFilter("moto")}
+                >
+                  <Bike size={17} /> Μηχανές
+                </button>
+              )}
             </div>
           </div>
           <div className="fleet-layout">
@@ -114,6 +121,9 @@ export function School({ select }: { select: (id: LicenceId) => void }) {
               <Photo
                 key={filter}
                 src={filter === "car" ? assets.hero : assets.motorcycle}
+                avif={
+                  filter === "car" ? assets.heroAvif : assets.motorcycleAvif
+                }
                 alt={
                   filter === "car"
                     ? "Ενδεικτική φωτογραφία εκπαιδευτικού αυτοκινήτου"
@@ -125,7 +135,9 @@ export function School({ select }: { select: (id: LicenceId) => void }) {
                   ? "Τέσσερις τροχοί. Αμέτρητες δυνατότητες."
                   : "Δύο τροχοί. Μια νέα ελευθερία."}
               </span>
-              <small>Εικόνα demo · Ενδεικτικός στόλος</small>
+              {business.demo && (
+                <small>Εικόνα AI για το demo · Ενδεικτικός στόλος</small>
+              )}
             </div>
             <div className="vehicle-list" aria-live="polite">
               {filteredVehicles.map((vehicle) => (
@@ -160,15 +172,17 @@ export function School({ select }: { select: (id: LicenceId) => void }) {
               label="ΟΙ ΑΝΘΡΩΠΟΙ ΣΟΥ"
               title="Δίπλα σου. Όχι απλώς δίπλα στο τιμόνι."
             >
-              Τρεις διαφορετικοί άνθρωποι. Η ίδια υπομονή και η ίδια αγάπη για
-              τη σωστή οδήγηση.
+              Άνθρωποι με υπομονή και αγάπη για τη σωστή οδήγηση.{" "}
+              {business.demo &&
+                "Η ομάδα παρουσιάζεται ως φανταστικό παράδειγμα."}
             </SectionHeading>
             <span className="section-index">MEET YOUR CO-DRIVERS</span>
           </div>
           <div className="team-photo">
             <Photo
               src={assets.team}
-              alt="Η φανταστική ομάδα DRIVEON: Γιώργος, Μαρία και Νίκος, από αριστερά προς τα δεξιά"
+              avif={assets.teamAvif}
+              alt={`${business.media.teamAlt}${business.demo ? " — φανταστικά πρόσωπα, εικόνα AI" : ""}`}
             />
             <div>
               <HeartHandshake size={19} /> Καλή χημεία. Καλύτερα μαθήματα.

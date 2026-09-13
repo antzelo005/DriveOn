@@ -1,5 +1,17 @@
 # Validation record
 
+## Client-readiness refinement — 14 September 2026
+
+- Strict TypeScript, production build, lint and strict repository-path verification passed.
+- 44 checks passed across Chromium, Edge, WebKit and emulated mobile: existing flows plus demo contact isolation, finder age boundaries/back/restart/prefill, accessible feedback, and delivery adapter failure/retry/timeout/no-send behavior.
+- An isolated client fixture passed real-mode contact URL, contextual WhatsApp, hidden unverified proof, feature flags, mocked form error/retry/success, click-to-load map, custom-domain base, CNAME, schema, indexing and sitemap checks. No real messages were sent.
+- Screenshots captured at 320, 375, 390, 430, 1280, 1440 and 1920px for every major section and the demo toast. Reviewed desktop finder/team, mobile hero/contact/location and photo crops; fixed the footer/sticky button styles and reset focus after adding the honeypot.
+- Lighthouse mobile: Performance **97**, Accessibility **100**, Best Practices **100**, SEO **66**; FCP **1.7s**, LCP **2.0s**, CLS **0.005**, TBT **120ms**. Local simulated measurements; demo intentionally remains unindexed.
+- Firefox was retried: browser launch still fails with `spawn UNKNOWN`; no Firefox browser pass is claimed. WebKit is an engine proxy, not physical iOS/macOS testing.
+- Demo publishes no fictional street address, actionable contact hrefs, LocalBusiness schema or sitemap. AI/sample disclosures remain visible. Optional tracking and real delivery remain off.
+
+The record below documents the original deployment.
+
 Validated locally on Windows on 13 September 2026.
 
 - Production build, strict TypeScript build and Oxlint: passed.

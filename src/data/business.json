@@ -11,7 +11,6 @@
   "postalCode": "12134",
   "region": "Αττική",
   "country": "GR",
-  "demo": true,
   "areasServed": [
     "Περιστέρι",
     "Ίλιον",
@@ -26,14 +25,146 @@
       "hours": "09:00–20:00",
       "schema": "Mo-Fr 09:00-20:00"
     },
-    { "days": "Σάββατο", "hours": "09:00–15:00", "schema": "Sa 09:00-15:00" },
-    { "days": "Κυριακή", "hours": "Κλειστά", "schema": null }
+    {
+      "days": "Σάββατο",
+      "hours": "09:00–15:00",
+      "schema": "Sa 09:00-15:00"
+    },
+    {
+      "days": "Κυριακή",
+      "hours": "Κλειστά",
+      "schema": null
+    }
   ],
   "socialLinks": [],
   "stats": [
-    { "value": "500+", "label": "μαθητές στον δρόμο" },
-    { "value": "10+", "label": "χρόνια μαζί σου" },
-    { "value": "6", "label": "ημέρες μαθημάτων / εβδομάδα" },
-    { "value": "100%", "label": "στον δικό σου ρυθμό" }
-  ]
+    {
+      "value": "Μαζί",
+      "label": "από την πρώτη απορία",
+      "verified": false
+    },
+    {
+      "value": "Βήμα βήμα",
+      "label": "θεωρία και πρακτική",
+      "verified": false
+    },
+    {
+      "value": "Στα μέτρα σου",
+      "label": "ο δικός σου ρυθμός",
+      "verified": false
+    },
+    {
+      "value": "Ξεκάθαρα",
+      "label": "διαδικασία και κόστος",
+      "verified": false
+    }
+  ],
+  "mode": "demo",
+  "legalName": "",
+  "brand": {
+    "logoText": "DRIVE",
+    "logoAccent": "ON",
+    "subtitle": "ΣΧΟΛΗ ΟΔΗΓΩΝ · ΠΕΡΙΣΤΕΡΙ",
+    "tagline": "YOUR NEXT CHAPTER. IN DRIVE.",
+    "navy": "#142329",
+    "accent": "#f5c542"
+  },
+  "whatsappNumber": "",
+  "viberNumber": "",
+  "location": {
+    "areaLabel": "Περιστέρι, Δυτική Αθήνα",
+    "nearestTransport": "Μετρό Περιστέρι",
+    "mapsUrl": "",
+    "googleBusinessUrl": "",
+    "embedUrl": "",
+    "latitude": null,
+    "longitude": null
+  },
+  "publication": {
+    "identityVerified": false,
+    "contentReviewed": false,
+    "mediaApproved": false,
+    "legalReviewed": false
+  },
+  "features": {
+    "automaticCar": true,
+    "saturdayLessons": true,
+    "eveningLessons": true,
+    "pickup": false,
+    "freeIntro": false,
+    "theoryTests": false,
+    "englishLessons": false,
+    "pricePackages": false
+  },
+  "languages": ["Ελληνικά"],
+  "enabledLicences": ["B", "A1", "A2", "A"],
+  "services": [
+    {
+      "label": "Επέκταση διπλώματος",
+      "enabled": true
+    },
+    {
+      "label": "Ανανέωση διπλώματος",
+      "enabled": true
+    },
+    {
+      "label": "Μαθήματα επανεκπαίδευσης",
+      "enabled": true
+    },
+    {
+      "label": "Ενημέρωση για επαγγελματικές κατηγορίες",
+      "enabled": true
+    }
+  ],
+  "rating": {
+    "score": "4.9",
+    "count": "180+",
+    "verified": false,
+    "reviewsUrl": ""
+  },
+  "seo": {
+    "siteUrl": "",
+    "title": "",
+    "description": "",
+    "socialImage": "images/social.jpg",
+    "imageAlt": "DRIVEON — Το δίπλωμά σου. Η ελευθερία σου.",
+    "priceRange": ""
+  },
+  "media": {
+    "hero": "images/driveon-car.webp",
+    "heroSmall": "images/driveon-car-small.webp",
+    "team": "images/driveon-team.webp",
+    "motorcycle": "images/driveon-motorcycle.webp",
+    "heroAlt": "Εκπαιδευτικό αυτοκίνητο DRIVEON σε αθηναϊκή γειτονιά",
+    "teamAlt": "Η ομάδα εκπαιδευτών DRIVEON",
+    "motorcycleAlt": "Εκπαιδευτική μοτοσυκλέτα DRIVEON",
+    "heroAvif": "images/driveon-car.avif",
+    "heroSmallAvif": "images/driveon-car-small.avif",
+    "teamAvif": "images/driveon-team.avif",
+    "motorcycleAvif": "images/driveon-motorcycle.avif"
+  },
+  "form": {
+    "endpoint": "",
+    "methods": ["phone", "whatsapp", "viber", "email"],
+    "timeoutMs": 12000
+  },
+  "analytics": {
+    "enabled": false,
+    "requiresConsent": true
+  },
+  "legal": {
+    "privacyText": "",
+    "cookiesText": ""
+  },
+  "theoryResource": {
+    "enabled": false,
+    "title": "",
+    "url": ""
+  },
+  "promotion": {
+    "enabled": false,
+    "title": "",
+    "description": ""
+  },
+  "prices": []
 }

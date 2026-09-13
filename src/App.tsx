@@ -1,3 +1,8 @@
+import {
+  ContactActionLink,
+  ContactProvider,
+} from "./components/ContactActions";
+import { useContactCategory } from "./lib/contact-context";
 import { useState } from "react";
 import {
   ArrowUpRight,
@@ -6,7 +11,7 @@ import {
   Navigation,
   Phone,
 } from "lucide-react";
-import { business, contactLinks } from "./data/business";
+import { business } from "./data/business";
 import type { LicenceId } from "./data/content";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
@@ -18,14 +23,17 @@ import { ContactForm } from "./components/ContactForm";
 import { LegalDialog } from "./components/Shared";
 import "./App.css";
 
-function App() {
+function Site() {
+  const { setCategory } = useContactCategory();
   const [selection, setSelection] = useState<{
     id: LicenceId | "";
     key: number;
+    message?: string;
   }>({ id: "", key: 0 });
   const [legal, setLegal] = useState<"privacy" | "cookies" | null>(null);
-  const selectLicence = (id: LicenceId) => {
-    setSelection((previous) => ({ id, key: previous.key + 1 }));
+  const selectLicence = (id: LicenceId, message?: string) => {
+    setCategory(id);
+    setSelection((previous) => ({ id, message, key: previous.key + 1 }));
     requestAnimationFrame(() =>
       document.getElementById("name")?.focus({ preventScroll: true }),
     );
@@ -64,26 +72,26 @@ function App() {
               </div>
               <div className="direct-contact">
                 <span>Προτιμάς να μιλήσουμε κατευθείαν;</span>
-                <a className="large-phone" href={contactLinks.phone}>
+                <ContactActionLink className="large-phone" action="phone">
                   <Phone size={23} />
                   {business.phone}
                   <ArrowUpRight size={22} />
-                </a>
+                </ContactActionLink>
                 <div className="messenger-links">
-                  <a
-                    href={contactLinks.whatsapp}
+                  <ContactActionLink
+                    action="whatsapp"
                     target="_blank"
                     rel="noreferrer"
                   >
                     <MessageCircle size={18} />
                     WhatsApp
                     <ArrowUpRight size={13} />
-                  </a>
-                  <a href={contactLinks.viber}>
+                  </ContactActionLink>
+                  <ContactActionLink action="viber">
                     <Phone size={17} />
                     Viber
                     <ArrowUpRight size={13} />
-                  </a>
+                  </ContactActionLink>
                 </div>
               </div>
               <div className="contact-route" aria-hidden="true">
@@ -109,4 +117,10 @@ function App() {
     </>
   );
 }
-export default App;
+export default function App() {
+  return (
+    <ContactProvider>
+      <Site />
+    </ContactProvider>
+  );
+}

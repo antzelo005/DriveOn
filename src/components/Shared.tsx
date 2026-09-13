@@ -15,10 +15,10 @@ export function Logo({ light = false }: { light?: boolean }) {
       </span>
       <span>
         <strong>
-          {business.shortName.slice(0, -2)}
-          <span>{business.shortName.slice(-2)}</span>
+          {business.brand.logoText}
+          <span>{business.brand.logoAccent}</span>
         </strong>
-        <small>ΣΧΟΛΗ ΟΔΗΓΩΝ · ΠΕΡΙΣΤΕΡΙ</small>
+        <small>{business.brand.subtitle}</small>
       </span>
     </a>
   );
@@ -51,12 +51,16 @@ export function Photo({
   className = "",
   eager = false,
   srcSet,
+  avif,
+  avifSrcSet,
 }: {
   src: string;
   alt: string;
   className?: string;
   eager?: boolean;
   srcSet?: string;
+  avif?: string;
+  avifSrcSet?: string;
 }) {
   const [failed, setFailed] = useState(false);
   return failed ? (
@@ -65,19 +69,28 @@ export function Photo({
       <span>{business.shortName}</span>
     </div>
   ) : (
-    <img
-      src={src}
-      srcSet={srcSet}
-      sizes={srcSet ? "(max-width: 700px) 100vw, 55vw" : undefined}
-      alt={alt}
-      className={className}
-      loading={eager ? "eager" : "lazy"}
-      fetchPriority={eager ? "high" : "auto"}
-      decoding="async"
-      width="1536"
-      height="1024"
-      onError={() => setFailed(true)}
-    />
+    <picture className="photo-picture">
+      {avif && (
+        <source
+          type="image/avif"
+          srcSet={avifSrcSet || avif}
+          sizes={srcSet ? "(max-width: 700px) 100vw, 55vw" : undefined}
+        />
+      )}
+      <img
+        src={src}
+        srcSet={srcSet}
+        sizes={srcSet ? "(max-width: 700px) 100vw, 55vw" : undefined}
+        alt={alt}
+        className={className}
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={eager ? "high" : "auto"}
+        decoding="async"
+        width="1536"
+        height="1024"
+        onError={() => setFailed(true)}
+      />
+    </picture>
   );
 }
 export function TextLink({
@@ -131,13 +144,24 @@ export function LegalDialog({
         >
           <X />
         </button>
-        <p className="eyebrow">{business.shortName} · DEMO</p>
+        <p className="eyebrow">
+          {business.shortName}
+          {business.demo ? " · DEMO" : ""}
+        </p>
         <h2 id="legal-title">
           {kind === "cookies"
             ? "Cookies & απόρρητο"
-            : "Πολιτική απορρήτου demo"}
+            : business.demo
+              ? "Πολιτική απορρήτου demo"
+              : "Πολιτική απορρήτου"}
         </h2>
-        {kind === "cookies" ? (
+        {!business.demo ? (
+          <p className="legal-client-text">
+            {kind === "cookies"
+              ? business.legal.cookiesText
+              : business.legal.privacyText}
+          </p>
+        ) : kind === "cookies" ? (
           <>
             <p>
               Αυτό το demo δεν χρησιμοποιεί cookies, εργαλεία ανάλυσης ή
@@ -145,9 +169,9 @@ export function LegalDialog({
               φιλοξενούνται μαζί με τον ιστότοπο.
             </p>
             <p>
-              Οι σύνδεσμοι προς Google Maps, WhatsApp και άλλες εξωτερικές
-              υπηρεσίες ανοίγουν τις αντίστοιχες εφαρμογές ή ιστοσελίδες, όπου
-              ισχύουν οι δικές τους πολιτικές.
+              Οι ενέργειες επικοινωνίας και οι οδηγίες χάρτη είναι ανενεργές. Ο
+              σύνδεσμος επίσημης ενημέρωσης οδηγεί σε κρατικό ιστότοπο, όπου
+              ισχύει η δική του πολιτική απορρήτου.
             </p>
           </>
         ) : (
