@@ -25,4 +25,3 @@ Saved asset: `public/images/driveon-motorcycle.webp`
 Prompt:
 
 > Use case: photorealistic-natural. Asset: premium driving school motorcycle training photograph landscape 3:2. Matte dark navy mid-size naked road motorcycle, similar to a 500cc learner motorcycle, parked in front three-quarter profile facing left on quiet pale concrete urban practice area in Athens. Small orange training cones behind, pale cream Greek buildings and olive trees softly blurred. No people. Full motorcycle in frame including wheels, helmet resting on seat, warm natural afternoon light, restrained warm editorial grade coordinated with white learner car photography. High quality realistic approachable driving lesson feeling, not racing or luxury advertising. No text, no watermarks.
-

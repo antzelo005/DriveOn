@@ -14,6 +14,19 @@ Validated locally on Windows on 13 September 2026.
 - Firefox was attempted but the Playwright browser executable could not start because Windows reported a missing `mozglue` side-by-side assembly. The explicit Firefox suite is retained for a working environment. No Firefox pass is claimed.
 - WebKit testing does not replace a final physical-device Safari check.
 
-The fictional demo deliberately disallows search indexing and uses a reserved `.example` canonical origin until a deployment origin is configured. No aggregate rating is included in structured data.
+The fictional demo deliberately disallows search indexing. Canonical and social metadata now use the full GitHub Pages URL, including `/DriveOn/`. No aggregate rating is included in structured data.
 
-Generated reports and screenshots live in the ignored `artifacts/` directory. Browser reports and failure traces are also ignored. The repository contains no secrets, generated build output or installed packages in its tracked source set. The website is prepared for static deployment but no public hosting or domain was provisioned.
+Generated reports and screenshots live in the ignored `artifacts/` directory. Browser reports and failure traces are also ignored. The repository contains no secrets, generated build output or installed packages in its tracked source set. The website is deployed through GitHub Actions to GitHub Pages at https://antzelo005.github.io/DriveOn/.
+
+## GitHub Pages deployment verification
+
+- Repository: https://github.com/antzelo005/DriveOn
+- Live site: https://antzelo005.github.io/DriveOn/
+- First successful Actions deployment: https://github.com/antzelo005/DriveOn/actions/runs/34773585617
+- Production Vite base: `/DriveOn/`, derived from the actual repository name in Actions. Dynamic images, pre-rendered image sources, compiled CSS/JavaScript, fonts, favicon and metadata all retain the prefix.
+- GitHub Pages source is configured as GitHub Actions; pushes to `main` deploy automatically.
+- Production build and lint passed locally; GitHub's Linux runner passed `npm ci`, lint, build, pre-render, prefix verification and deployment.
+- All 28 existing browser checks passed after adapting their navigation URLs to the production base.
+- `npm run verify:pages` passed against a strict static subdirectory server, without a Vite or SPA fallback.
+- `npm run verify:pages -- --url=https://antzelo005.github.io/DriveOn/` passed against the live site at 1440px, 390px and 320px. Verified nine resources under the repository prefix, image decoding, responsive sources, CSS, fonts, favicon, hydration, vehicle filters, category selection, FAQ, anchor reloads and metadata. No console or HTTP errors occurred.
+- Vercel and Netlify configuration files were removed. Only GitHub Pages deployment is configured.

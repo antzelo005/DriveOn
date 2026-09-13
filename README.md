@@ -4,7 +4,7 @@ A complete, Greek-first commercial demo built for local driving-school outreach.
 
 ## Stack
 
-React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Lucide icons and locally hosted Inter Variable (Greek and Latin subsets). Custom components and CSS provide the design; there is no UI framework, router, database, account system or paid API. The lockfile pins the tested dependency versions. Node 22.12+ or Node 24 LTS is recommended; built here with Node 24.
+React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Lucide icons and locally hosted Inter Variable (Greek and Latin subsets). Custom components and CSS provide the design; there is no UI framework, router, database, account system or paid API. The lockfile pins the tested dependency versions. Use Node 24 LTS, matching the GitHub Actions runtime and the native TypeScript deployment-check scripts.
 
 ## Run locally
 
