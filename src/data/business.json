@@ -1,0 +1,39 @@
+{
+  "name": "Σχολή Οδηγών DRIVEON",
+  "shortName": "DRIVEON",
+  "phone": "210 123 4567",
+  "phoneHref": "+302101234567",
+  "mobile": "690 123 4567",
+  "mobileHref": "+306901234567",
+  "email": "info@driveon.example",
+  "address": "Λεωφ. Παναγή Τσαλδάρη 100",
+  "city": "Περιστέρι",
+  "postalCode": "12134",
+  "region": "Αττική",
+  "country": "GR",
+  "demo": true,
+  "areasServed": [
+    "Περιστέρι",
+    "Ίλιον",
+    "Αιγάλεω",
+    "Πετρούπολη",
+    "Χαϊδάρι",
+    "Άγιοι Ανάργυροι"
+  ],
+  "openingHours": [
+    {
+      "days": "Δευτέρα–Παρασκευή",
+      "hours": "09:00–20:00",
+      "schema": "Mo-Fr 09:00-20:00"
+    },
+    { "days": "Σάββατο", "hours": "09:00–15:00", "schema": "Sa 09:00-15:00" },
+    { "days": "Κυριακή", "hours": "Κλειστά", "schema": null }
+  ],
+  "socialLinks": [],
+  "stats": [
+    { "value": "500+", "label": "μαθητές στον δρόμο" },
+    { "value": "10+", "label": "χρόνια μαζί σου" },
+    { "value": "6", "label": "ημέρες μαθημάτων / εβδομάδα" },
+    { "value": "100%", "label": "στον δικό σου ρυθμό" }
+  ]
+}
