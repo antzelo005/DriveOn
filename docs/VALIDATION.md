@@ -1,5 +1,20 @@
 # Validation record
 
+## Mobile-first refinement — 14 September 2026
+
+- Phone styles are consolidated in `src/mobile.css`: targeted tablet typography, then 700/540/359px rules. Repeated overrides and unused extra-service styling were removed; shared and desktop styling remain in `src/App.css`.
+- Mobile hero image starts around 472–489px from the page top at 320–430px widths, beneath one dominant CTA and a quieter secondary link. Reassurance/proof follows the image. Phone headers contain logo/menu; sticky actions provide persistent contact.
+- Reviews use native horizontal scroll-snap, a visible next-card hint, keyboard-scrollable region and previous/next controls. All six are reachable, with no timer. Desktop retains its original three-card pagination. Resizing resets the mobile position/counter.
+- Process is a vertical timeline, benefits are compact rows, body copy is larger, map height is reduced, and the form precedes direct contacts in both visual and keyboard order. Menu and focused form fields suppress the sticky bar; fields use 16px text.
+- Meaningful phone text audit found no text below 11px at 320, 390 and 430px. Major controls have at least 44px touch height. Default page height fell from 14,501 to approximately 13,400px at 320, and from 13,463 to approximately 12,560px at 390, without removing sections.
+- Screenshots captured at 320, 360, 375, 390, 430, 768, 1280, 1440 and 1920px, including all sections, form, menu and toast. Hero, categories, process, benefits, fleet, team, reviews, FAQ, contact and location were manually reviewed.
+- Desktop before/after comparison at 1280, 1440 and 1920px retained the composition. Selected section screenshots changed by no more than 0.01% of pixels at a 10-level colour threshold (mostly rendering variation); hero screenshots were unchanged. This is a local visual comparison, not a brittle committed pixel assertion.
+- Full 56-test suite passed across Chromium, installed Edge, WebKit and emulated mobile. Added coverage includes phone CTA/image order, readable typography, touch targets, keyboard form/contact order, sticky suppression, review scrolling/resize, menu focus/backdrop and 360px overflow. Automated axe checks remained clear.
+- Strict TypeScript, lint, production build, strict Pages prefix verification and the isolated client fixture passed. Firefox remains unavailable on this Windows host; WebKit is not a claim of physical Safari or iPhone-keyboard validation.
+- Final mobile Lighthouse: Performance **97**, Accessibility **100**, Best Practices **100**, SEO **66**. FCP **1.6s**, LCP **1.7s**, CLS **0.004**, TBT **160ms**. Earlier mobile runs ranged from 95–97 Performance. Demo indexing remains intentionally disabled; scores are simulated local measurements.
+
+Client-readiness deployment succeeded in [GitHub Actions run 34788921179](https://github.com/antzelo005/DriveOn/actions/runs/34788921179); live repository-path verification passed afterward. The mobile update uses the same automatic Pages workflow and `/DriveOn/` base.
+
 ## Client-readiness refinement — 14 September 2026
 
 - Strict TypeScript, production build, lint and strict repository-path verification passed.

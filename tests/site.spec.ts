@@ -103,7 +103,7 @@ test("fleet filters, reviews, FAQ and privacy keyboard interaction", async ({
 });
 
 test("responsive widths remain inside viewport", async ({ page }) => {
-  for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
+  for (const width of [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("./");
     const dimensions = await page.evaluate(() => ({

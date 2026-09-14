@@ -42,48 +42,50 @@ export function Hero() {
               Δες τα διπλώματα <ArrowDown size={17} />
             </a>
           </div>
-          <div className="hero-reassurance">
-            <span>
-              <Check size={15} /> Χωρίς άγχος
-            </span>
-            <span>
-              <Check size={15} /> Στον ρυθμό σου
-            </span>
-            <span>
-              <Check size={15} /> Με ξεκάθαρο πλάνο
-            </span>
-          </div>
-          {(business.demo || business.rating.verified) && (
-            <div className="hero-rating">
-              {business.demo && (
-                <div className="avatar-stack">
-                  <span>ΕΚ</span>
-                  <span>ΜΠ</span>
-                  <span>ΑΜ</span>
-                  <span>+</span>
-                </div>
-              )}
-              <div>
-                <div className="rating-line">
-                  <span className="stars" aria-label="5 αστέρια">
-                    ★★★★★
-                  </span>
-                  <strong>
-                    {business.rating.score}
-                    <span>/5</span>
-                  </strong>
-                </div>
-                <small>
-                  {business.rating.count} αξιολογήσεις{" "}
-                  {business.demo && (
-                    <span className="demo-label">
-                      · Φανταστικό παράδειγμα demo
-                    </span>
-                  )}
-                </small>
-              </div>
+          <div className="hero-proof">
+            <div className="hero-reassurance">
+              <span>
+                <Check size={15} /> Χωρίς άγχος
+              </span>
+              <span>
+                <Check size={15} /> Στον ρυθμό σου
+              </span>
+              <span>
+                <Check size={15} /> Με ξεκάθαρο πλάνο
+              </span>
             </div>
-          )}
+            {(business.demo || business.rating.verified) && (
+              <div className="hero-rating">
+                {business.demo && (
+                  <div className="avatar-stack">
+                    <span>ΕΚ</span>
+                    <span>ΜΠ</span>
+                    <span>ΑΜ</span>
+                    <span>+</span>
+                  </div>
+                )}
+                <div>
+                  <div className="rating-line">
+                    <span className="stars" aria-label="5 αστέρια">
+                      ★★★★★
+                    </span>
+                    <strong>
+                      {business.rating.score}
+                      <span>/5</span>
+                    </strong>
+                  </div>
+                  <small>
+                    {business.rating.count} αξιολογήσεις{" "}
+                    {business.demo && (
+                      <span className="demo-label">
+                        · Φανταστικό παράδειγμα demo
+                      </span>
+                    )}
+                  </small>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div className="hero-visual">
           <Photo

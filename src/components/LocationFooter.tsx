@@ -156,10 +156,8 @@ export function Footer({
           <div className="footer-brand">
             <Logo light />
             <p>
-              Κάθε μεγάλη διαδρομή ξεκινά
-              <br />
-              με ένα μικρό βήμα.
-              <br />
+              Κάθε μεγάλη διαδρομή ξεκινά <br />
+              με ένα μικρό βήμα. <br />
               Κάνε το δικό σου μαζί μας.
             </p>
             <span className="footer-tagline">{business.brand.tagline}</span>

@@ -10,6 +10,22 @@ export function Header() {
   const [active, setActive] = useState("");
   const toggle = useRef<HTMLButtonElement>(null);
   const nav = useRef<HTMLElement>(null);
+  const followSection = (id: string) => {
+    setOpen(false);
+    requestAnimationFrame(() => {
+      const heading = document
+        .getElementById(id)
+        ?.querySelector<HTMLElement>("h2, h3");
+      if (!heading) return;
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+      heading.addEventListener(
+        "blur",
+        () => heading.removeAttribute("tabindex"),
+        { once: true },
+      );
+    });
+  };
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -28,6 +44,7 @@ export function Header() {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("menu-open");
     nav.current?.querySelector("a")?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -59,6 +76,7 @@ export function Header() {
     window.addEventListener("resize", onResize);
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("menu-open");
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
     };
@@ -120,16 +138,22 @@ export function Header() {
           hidden={!open}
         >
           {navigation.map(([id, label]) => (
-            <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>
+            <a key={id} href={`#${id}`} onClick={() => followSection(id)}>
               {label}
               <ArrowUpRight size={18} />
             </a>
           ))}
-          <a href="#epikoinonia" onClick={() => setOpen(false)}>
+          <a href="#epikoinonia" onClick={() => followSection("epikoinonia")}>
             Επικοινωνία
             <ArrowUpRight size={18} />
           </a>
-          <ContactActionLink action="phone" onClick={() => setOpen(false)}>
+          <ContactActionLink
+            action="phone"
+            onClick={() => {
+              setOpen(false);
+              toggle.current?.focus();
+            }}
+          >
             <Phone size={18} />
             {business.phone}
           </ContactActionLink>

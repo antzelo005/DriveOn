@@ -3,6 +3,7 @@ import {
   ContactProvider,
 } from "./components/ContactActions";
 import { useContactCategory } from "./lib/contact-context";
+import { usePhoneLayout } from "./lib/use-phone-layout";
 import { useState } from "react";
 import {
   ArrowUpRight,
@@ -22,8 +23,10 @@ import { Location, Footer } from "./components/LocationFooter";
 import { ContactForm } from "./components/ContactForm";
 import { LegalDialog } from "./components/Shared";
 import "./App.css";
+import "./mobile.css";
 
 function Site() {
+  const mobile = usePhoneLayout();
   const { setCategory } = useContactCategory();
   const [selection, setSelection] = useState<{
     id: LicenceId | "";
@@ -53,47 +56,20 @@ function Site() {
                 <span />Η ΕΠΟΜΕΝΗ ΚΙΝΗΣΗ ΕΙΝΑΙ ΔΙΚΗ ΣΟΥ
               </p>
               <h2>
-                Έτοιμος για
-                <br />
-                την πρώτη σου
-                <br />
+                Έτοιμος για <br />
+                την πρώτη σου <br />
                 <span>διαδρομή;</span>
               </h2>
               <p>
-                Πες μας ποιο δίπλωμα σε ενδιαφέρει.
-                <br />
-                Θα σου εξηγήσουμε τα επόμενα βήματα,
-                <br />
-                θα λύσουμε τις απορίες σου και θα βρούμε
+                Πες μας ποιο δίπλωμα σε ενδιαφέρει. <br />
+                Θα σου εξηγήσουμε τα επόμενα βήματα, <br />
+                θα λύσουμε τις απορίες σου και θα βρούμε{" "}
                 <br className="desktop-break" /> το πρόγραμμα που σου ταιριάζει.
               </p>
               <div className="contact-promise">
                 <Check size={17} /> Χωρίς δέσμευση. Με όλες τις απαντήσεις.
               </div>
-              <div className="direct-contact">
-                <span>Προτιμάς να μιλήσουμε κατευθείαν;</span>
-                <ContactActionLink className="large-phone" action="phone">
-                  <Phone size={23} />
-                  {business.phone}
-                  <ArrowUpRight size={22} />
-                </ContactActionLink>
-                <div className="messenger-links">
-                  <ContactActionLink
-                    action="whatsapp"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <MessageCircle size={18} />
-                    WhatsApp
-                    <ArrowUpRight size={13} />
-                  </ContactActionLink>
-                  <ContactActionLink action="viber">
-                    <Phone size={17} />
-                    Viber
-                    <ArrowUpRight size={13} />
-                  </ContactActionLink>
-                </div>
-              </div>
+              {!mobile && <DirectContact />}
               <div className="contact-route" aria-hidden="true">
                 <span />
                 <i />
@@ -108,6 +84,7 @@ function Site() {
               selection={selection}
               onPrivacy={() => setLegal("privacy")}
             />
+            {mobile && <DirectContact />}
           </div>
         </section>
         <Location />
@@ -115,6 +92,30 @@ function Site() {
       <Footer openLegal={setLegal} />
       <LegalDialog kind={legal} close={() => setLegal(null)} />
     </>
+  );
+}
+function DirectContact() {
+  return (
+    <div className="direct-contact">
+      <span>Προτιμάς να μιλήσουμε κατευθείαν;</span>
+      <ContactActionLink className="large-phone" action="phone">
+        <Phone size={23} />
+        {business.phone}
+        <ArrowUpRight size={22} />
+      </ContactActionLink>
+      <div className="messenger-links">
+        <ContactActionLink action="whatsapp" target="_blank" rel="noreferrer">
+          <MessageCircle size={18} />
+          WhatsApp
+          <ArrowUpRight size={13} />
+        </ContactActionLink>
+        <ContactActionLink action="viber">
+          <Phone size={17} />
+          Viber
+          <ArrowUpRight size={13} />
+        </ContactActionLink>
+      </div>
+    </div>
   );
 }
 export default function App() {

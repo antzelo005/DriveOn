@@ -4,6 +4,8 @@ A premium Greek driving-school concept built with React 19, TypeScript 6, Vite 8
 
 Live: **https://antzelo005.github.io/DriveOn/**
 
+Phone layouts use a clean header, full-width primary action, earlier hero image, compact timelines and a native scroll-snap review rail. The desktop composition is preserved. Phone styles are consolidated in `src/mobile.css` (700, 540 and 359px, plus targeted tablet typography); shared/desktop styling stays in `src/App.css`. The bottom action bar respects safe areas and is suppressed while the menu or a form field is active. No carousel or animation dependency was added.
+
 ## Run and verify
 
 Use Node 24, matching GitHub Actions.

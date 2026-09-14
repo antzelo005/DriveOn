@@ -16,23 +16,23 @@ The live DRIVEON site is a fictional demonstration. Keep `src/data/business.json
 
 ## Configuration map
 
-| File / key | Change |
-| --- | --- |
-| `src/data/business.json` → `mode` | `demo` or `client`; the only mode switch |
-| `name`, `legalName`, `shortName`, `brand` | Identity, logo text/accent, subtitle, tagline, navy and yellow hex tokens |
-| `phone*`, `mobile*`, `email`, `whatsappNumber`, `viberNumber` | Real contact channels; empty optional channels are omitted |
-| `location`, `address`, `city`, `postalCode`, `region`, `areasServed`, `openingHours` | Actual local information; map embed stays unloaded until requested |
-| `enabledLicences`, `features`, `services`, `languages` | Offered categories and optional services; check hours separately from lesson availability |
-| `rating`, `stats` | Only `verified: true` entries appear in client mode; no aggregate-rating schema is generated |
-| `media` | Relative public paths and meaningful alt text; clear AVIF fields if no corresponding files exist |
-| `form` | HTTPS JSON endpoint, accepted methods and timeout; `VITE_LEAD_ENDPOINT` may override endpoint |
-| `legal` | Reviewed plain-text privacy and cookie notices, with newlines |
-| `seo` | Optional absolute site URL, title, description, social image/alt and substantiated price range |
-| `socialLinks` | Actual `{label,url}` profiles only; no empty placeholder buttons |
-| `theoryResource`, `promotion`, `prices` | Optional real content; all are off/empty by default |
-| `src/data/content.ts` | Licence descriptions/facts, process, instructor biographies, fleet, reviews and FAQs |
-| `src/App.css`, `src/index.css` | Section styling and shared tokens; preserve contrast when changing brand colours |
-| `config/github-pages.json` | Local fallback owner/repository; Actions derives it automatically |
+| File / key                                                                           | Change                                                                                                                  |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `src/data/business.json` → `mode`                                                    | `demo` or `client`; the only mode switch                                                                                |
+| `name`, `legalName`, `shortName`, `brand`                                            | Identity, logo text/accent, subtitle, tagline, navy and yellow hex tokens                                               |
+| `phone*`, `mobile*`, `email`, `whatsappNumber`, `viberNumber`                        | Real contact channels; empty optional channels are omitted                                                              |
+| `location`, `address`, `city`, `postalCode`, `region`, `areasServed`, `openingHours` | Actual local information; map embed stays unloaded until requested                                                      |
+| `enabledLicences`, `features`, `services`, `languages`                               | Offered categories and optional services; check hours separately from lesson availability                               |
+| `rating`, `stats`                                                                    | Only `verified: true` entries appear in client mode; no aggregate-rating schema is generated                            |
+| `media`                                                                              | Relative public paths and meaningful alt text; clear AVIF fields if no corresponding files exist                        |
+| `form`                                                                               | HTTPS JSON endpoint, accepted methods and timeout; `VITE_LEAD_ENDPOINT` may override endpoint                           |
+| `legal`                                                                              | Reviewed plain-text privacy and cookie notices, with newlines                                                           |
+| `seo`                                                                                | Optional absolute site URL, title, description, social image/alt and substantiated price range                          |
+| `socialLinks`                                                                        | Actual `{label,url}` profiles only; no empty placeholder buttons                                                        |
+| `theoryResource`, `promotion`, `prices`                                              | Optional real content; all are off/empty by default                                                                     |
+| `src/data/content.ts`                                                                | Licence descriptions/facts, process, instructor biographies, fleet, reviews and FAQs                                    |
+| `src/App.css`, `src/mobile.css`, `src/index.css`                                     | Desktop/shared styling, consolidated phone breakpoints and shared tokens; preserve contrast when changing brand colours |
+| `config/github-pages.json`                                                           | Local fallback owner/repository; Actions derives it automatically                                                       |
 
 The main identity is centralized, but Greek editorial copy still needs a human check when changing city or services. In particular, review the hero, school philosophy, category wording, FAQ transfer/retraining answer, team/fleet claims and every image caption. The `publication.contentReviewed` flag attests to this complete review; it is not automatic fact-checking.
 
